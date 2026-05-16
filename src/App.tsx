@@ -53,38 +53,36 @@ const routeBackgrounds: Record<string, { type: 'video' | 'image'; src: string }>
 
 function AppContent() {
   const location = useLocation();
-  
-  // Find background for current route
   const bgKey = Object.keys(routeBackgrounds).find(key => 
     key === '/' ? location.pathname === '/' : location.pathname.startsWith(key)
   );
   const bg = bgKey ? routeBackgrounds[bgKey] : null;
 
   return (
-    <div className="min-h-screen text-[#f5f2ed] bg-[#0a0908]">
+    <div className="min-h-screen text-[#f5f2ed] relative">
       <CustomCursor />
       
-      {/* Global Cinematic Texture */}
+      {/* Global Cinematic Texture - z-index 100 ensures it is on top of everything including UI */}
       <div className="fixed inset-0 pointer-events-none z-[100] opacity-[0.03] mix-blend-overlay" 
            style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }} />
 
-      {/* Unified Dynamic Background System */}
-      {bg && <PageBackground type={bg.type} src={bg.src} />}
+      {/* Dynamic Backgrounds - z-index 0 */}
+      {bg && <div className="fixed inset-0 z-0"><PageBackground type={bg.type} src={bg.src} /></div>}
 
       <Navbar />
       
-      <main className="relative z-10 w-full overflow-x-hidden">
+      <main className="relative z-10 w-full overflow-x-hidden pt-12">
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<PageWrapper><Landing /></PageWrapper>} />
-            <Route path="/dashboard" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 py-12 md:py-20 mb-32"><Dashboard /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/report/new" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 py-12 md:py-20 mb-32"><ReportForm /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/reports" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 py-12 md:py-20 mb-32"><ReportList /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/reports/:id" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 py-12 md:py-20 mb-32"><ReportDetail /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/guides" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 py-12 md:py-20 mb-32"><Guides /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/leaderboard" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 py-12 md:py-20 mb-32"><Leaderboard /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 py-12 md:py-20 mb-32"><Profile /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/admin" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 py-12 md:py-20 mb-32"><Admin /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><Dashboard /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/report/new" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><ReportForm /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/reports" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><ReportList /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/reports/:id" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><ReportDetail /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/guides" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><Guides /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/leaderboard" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><Leaderboard /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><Profile /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><Admin /></div></PageWrapper></ProtectedRoute>} />
           </Routes>
         </AnimatePresence>
       </main>
