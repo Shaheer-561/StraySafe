@@ -126,3 +126,28 @@ export function blobToBase64(blob: Blob): Promise<string> {
     reader.readAsDataURL(blob);
   });
 }
+
+export function analyzePriority(title: string, description: string) {
+  const text = `${title} ${description}`.toLowerCase();
+  
+  const emergencyKeywords = ['blood', 'bleeding', 'hit', 'car', 'unconscious', 'dying', 'severe', 'broken', 'critical'];
+  const medicalKeywords = ['sick', 'limp', 'limping', 'infection', 'wound', 'rabies', 'hurt', 'pain', 'crying'];
+  const lowPriorityKeywords = ['friendly', 'lost', 'wandering', 'healthy', 'spotted'];
+
+  let isEmergency = false;
+  let requiresMedicalHelp = false;
+  let priority = 'Medium'; // ReportPriority.MEDIUM
+
+  if (emergencyKeywords.some(kw => text.includes(kw))) {
+    isEmergency = true;
+    requiresMedicalHelp = true;
+    priority = 'High'; // ReportPriority.HIGH
+  } else if (medicalKeywords.some(kw => text.includes(kw))) {
+    requiresMedicalHelp = true;
+    priority = 'Medium'; // Could be HIGH depending on severity, but default to MEDIUM
+  } else if (lowPriorityKeywords.some(kw => text.includes(kw))) {
+    priority = 'Low'; // ReportPriority.LOW
+  }
+
+  return { priority, isEmergency, requiresMedicalHelp };
+}

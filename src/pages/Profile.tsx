@@ -139,7 +139,7 @@ export default function Profile() {
                className="w-full h-full object-cover" 
              />
           </div>
-          <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary text-white rounded-[32px] flex items-center justify-center font-black text-4xl border-[8px] border-[#050505] shadow-2xl italic font-serif">
+          <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary text-white rounded-[32px] flex items-center justify-center font-black text-4xl border-[8px] border-[#0f0d0a] shadow-2xl italic font-serif">
             {profile.grade}
           </div>
           <button 
@@ -304,7 +304,7 @@ export default function Profile() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsEditing(false)}
-              className="absolute inset-0 bg-[#050505]/80 backdrop-blur-3xl"
+              className="absolute inset-0 bg-[#0f0d0a]/80 backdrop-blur-3xl"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 40 }}

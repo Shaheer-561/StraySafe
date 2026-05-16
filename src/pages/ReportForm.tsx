@@ -5,7 +5,7 @@ import { db, storage } from '../lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp, doc, updateDoc, increment } from 'firebase/firestore';
 import { AnimalType, ReportPriority, ReportStatus } from '../types';
-import { handleFirestoreError, OperationType, calculateGrade, compressImage, blobToBase64 } from '../lib/utils';
+import { handleFirestoreError, OperationType, calculateGrade, compressImage, blobToBase64, analyzePriority } from '../lib/utils';
 import { Flag, AlertCircle, MapPin, Loader2, CheckCircle, Stethoscope, Camera } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
@@ -66,6 +66,16 @@ export default function ReportForm() {
       setPosition({ lat: 51.505, lng: -0.09 });
     }
   }, []);
+
+  React.useEffect(() => {
+    const { priority, isEmergency, requiresMedicalHelp } = analyzePriority(formData.title, formData.description);
+    setFormData(prev => ({
+      ...prev,
+      priority: priority as ReportPriority,
+      isEmergency,
+      requiresMedicalHelp
+    }));
+  }, [formData.title, formData.description]);
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -193,15 +203,35 @@ export default function ReportForm() {
             </select>
           </div>
           <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Priority Level</label>
-            <select
-              disabled={formData.isEmergency}
-              className="w-full p-6 glass-input rounded-3xl font-black uppercase tracking-widest text-[10px] text-white appearance-none disabled:opacity-30 [&>option]:bg-[#111] [&>option]:text-white"
-              value={formData.priority}
-              onChange={(e) => setFormData({ ...formData, priority: e.target.value as ReportPriority })}
-            >
-              {Object.values(ReportPriority).map(p => <option key={p} value={p}>{p}</option>)}
-            </select>
+            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">AI Priority Analysis</label>
+            <div className={`w-full p-6 rounded-3xl border-2 flex items-center justify-between transition-all ${
+              formData.isEmergency 
+                ? 'bg-red-500/10 border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.2)]' 
+                : formData.priority === 'High' || formData.requiresMedicalHelp
+                  ? 'bg-primary/10 border-primary shadow-[0_0_30px_rgba(255,92,0,0.2)]'
+                  : 'bg-white/5 border-white/10'
+            }`}>
+              <div className="flex items-center gap-4">
+                {formData.isEmergency ? (
+                  <AlertCircle className="w-6 h-6 text-red-500 animate-pulse" />
+                ) : formData.requiresMedicalHelp ? (
+                  <Stethoscope className="w-6 h-6 text-primary" />
+                ) : (
+                  <CheckCircle className="w-6 h-6 text-white/50" />
+                )}
+                <div>
+                  <p className="font-black text-sm text-white uppercase tracking-widest">
+                    {formData.isEmergency ? 'Emergency' : formData.priority}
+                  </p>
+                  <p className="text-[9px] text-white/40 uppercase tracking-[0.2em] mt-1">
+                    {formData.requiresMedicalHelp ? 'Medical Aid Req' : 'Standard Routine'}
+                  </p>
+                </div>
+              </div>
+              <div className="px-3 py-1 bg-white/10 rounded-full text-[8px] font-black text-white/60 uppercase tracking-[0.2em]">
+                Auto-Detected
+              </div>
+            </div>
           </div>
         </div>
 
@@ -239,52 +269,7 @@ export default function ReportForm() {
           </div>
         </div>
 
-        {/* Toggles */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Emergency Toggle */}
-          <div 
-            onClick={() => setFormData({ ...formData, isEmergency: !formData.isEmergency })}
-            className={`cursor-pointer p-8 rounded-[32px] border-2 transition-all flex items-center gap-6 ${
-              formData.isEmergency ? 'bg-red-500/10 border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.2)]' : 'bg-white/5 border-white/5 hover:border-white/10'
-            }`}
-          >
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${formData.isEmergency ? 'bg-red-500 text-white' : 'bg-white/5 text-white/20'}`}>
-              <AlertCircle className="w-7 h-7" />
-            </div>
-            <div className="flex-1">
-              <p className="font-black text-lg text-white uppercase italic">Emergency</p>
-              <p className="text-[10px] text-white/30 font-black uppercase tracking-widest">Critical</p>
-            </div>
-            <div className={`w-12 h-6 rounded-full p-1 transition-colors ${formData.isEmergency ? 'bg-red-500' : 'bg-white/10'}`}>
-              <motion.div 
-                animate={{ x: formData.isEmergency ? 24 : 0 }}
-                className="w-4 h-4 bg-white rounded-full shadow-sm" 
-              />
-            </div>
-          </div>
 
-          {/* Medical Help Toggle */}
-          <div 
-            onClick={() => setFormData({ ...formData, requiresMedicalHelp: !formData.requiresMedicalHelp })}
-            className={`cursor-pointer p-8 rounded-[32px] border-2 transition-all flex items-center gap-6 ${
-              formData.requiresMedicalHelp ? 'bg-primary/10 border-primary shadow-[0_0_30px_rgba(255,92,0,0.2)]' : 'bg-white/5 border-white/5 hover:border-white/10'
-            }`}
-          >
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${formData.requiresMedicalHelp ? 'bg-primary text-white' : 'bg-white/5 text-white/20'}`}>
-              <Stethoscope className="w-7 h-7" />
-            </div>
-            <div className="flex-1">
-              <p className="font-black text-lg text-white uppercase italic">Medical Aid</p>
-              <p className="text-[10px] text-white/30 font-black uppercase tracking-widest">Vet Required</p>
-            </div>
-            <div className={`w-12 h-6 rounded-full p-1 transition-colors ${formData.requiresMedicalHelp ? 'bg-primary' : 'bg-white/10'}`}>
-              <motion.div 
-                animate={{ x: formData.requiresMedicalHelp ? 24 : 0 }}
-                className="w-4 h-4 bg-white rounded-full shadow-sm" 
-              />
-            </div>
-          </div>
-        </div>
 
         {/* Photo Upload */}
         <div className="space-y-4">

@@ -1,74 +1,60 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Zap, Shield, Target, Award } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useAuth } from '../lib/auth';
 
 export default function Landing() {
   const { signIn, user } = useAuth();
 
-  useEffect(() => {
-    if (!document.querySelector('script[src="https://unpkg.com/@splinetool/viewer@1.9.90/build/spline-viewer.js"]')) {
-      const script = document.createElement('script');
-      script.type = 'module';
-      script.src = 'https://unpkg.com/@splinetool/viewer@1.9.90/build/spline-viewer.js';
-      document.head.appendChild(script);
-    }
-  }, []);
-
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Spline 3D Background */}
-      <div className="absolute inset-0 z-0 scale-[1.2] origin-center opacity-80">
-        <spline-viewer style={{ width: '100%', height: '100%' }} url="https://prod.spline.design/Y-O11MVMFkC-JOv1/scene.splinecode"></spline-viewer>
+    <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden">
+      {/* Full-screen Background Video */}
+      <div className="fixed inset-0 z-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+          poster="/images/hero-image.jpg"
+        >
+          <source src="/bg-video-2.mp4" type="video/mp4" />
+        </video>
+        {/* Cinematic Overlays */}
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0f0d0a] via-transparent to-[#0f0d0a]/60" />
       </div>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 min-h-screen flex flex-col justify-center relative z-10 pointer-events-none">
-        <div className="max-w-5xl mx-auto text-center space-y-12">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/10 bg-black/40 backdrop-blur-md shadow-2xl pointer-events-auto"
-          >
-            <Zap className="w-4 h-4 text-primary fill-primary animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/80">
-              Protocol StraySafe v2.0
-            </span>
-          </motion.div>
+      <div className="relative z-10 text-center px-6 max-w-5xl">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="space-y-8"
+        >
+          <p className="text-white/60 text-sm md:text-base font-black uppercase tracking-[0.6em] mb-4">
+            Animal Rescue Network
+          </p>
 
-          <div className="space-y-4">
-            <motion.h1
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="heading-huge text-glow"
-            >
-              EVERY SIGNAL <br />
-              <span className="shimmer-text">SAVES A LIFE</span>
-            </motion.h1>
-            
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="max-w-2xl mx-auto text-lg md:text-xl font-bold text-white/50 uppercase tracking-[0.1em] leading-relaxed"
-            >
-              The world's first decentralized neural network for <br className="hidden md:block" />
-              stray animal protection and rapid rescue response.
-            </motion.p>
-          </div>
+          <h1 className="text-7xl md:text-9xl font-black tracking-[calc(-0.06em)] leading-[0.8] text-white uppercase text-glow">
+            STRAY<span className="text-primary italic font-serif">SAFE</span>
+          </h1>
+
+          <p className="max-w-xl mx-auto text-xl md:text-2xl font-medium text-white/60 leading-relaxed mb-12">
+            The world's first decentralized neural network for stray animal protection and rapid rescue response.
+          </p>
 
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-12 pointer-events-auto"
+            transition={{ delay: 0.5, duration: 0.5 }}
           >
             {user ? (
               <Link
                 to="/dashboard"
-                className="w-full sm:w-auto px-16 py-6 bg-white text-black rounded-[32px] font-black text-xl hover:bg-primary hover:text-white transition-all hover:shadow-[0_0_60px_rgba(255,92,0,0.4)] flex items-center justify-center gap-3 group"
+                className="inline-flex items-center gap-4 px-16 py-7 bg-white text-black rounded-full font-black text-xl hover:bg-primary hover:text-white transition-all duration-500 hover:shadow-[0_0_80px_rgba(217,119,6,0.6)] group"
               >
                 ACCESS CONSOLE
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
@@ -76,35 +62,15 @@ export default function Landing() {
             ) : (
               <button
                 onClick={signIn}
-                className="w-full sm:w-auto px-16 py-6 bg-primary text-white rounded-[32px] font-black text-xl border border-primary/20 hover:scale-105 transition-all hover:shadow-[0_0_60px_rgba(255,92,0,0.5)] flex items-center justify-center gap-3 group"
+                className="inline-flex items-center gap-4 px-16 py-7 bg-primary text-white rounded-full font-black text-xl hover:scale-105 transition-all duration-500 hover:shadow-[0_0_80px_rgba(217,119,6,0.6)] group"
               >
                 INITIALIZE LINK
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
               </button>
             )}
           </motion.div>
-
-          {/* Features Preview */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-20 max-w-4xl mx-auto"
-          >
-            {[
-              { icon: Shield, label: "Neural Security", val: "Grade A" },
-              { icon: Target, label: "Rescue Range", val: "Global" },
-              { icon: Award, label: "Hero Registry", val: "Verified" }
-            ].map((f, i) => (
-              <div key={i} className="flex flex-col items-center gap-3">
-                <f.icon className="w-6 h-6 text-primary/60" />
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">{f.label}</span>
-                <span className="text-sm font-bold text-white/60">{f.val}</span>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </main>
+        </motion.div>
+      </div>
     </div>
   );
 }
