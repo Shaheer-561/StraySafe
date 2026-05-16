@@ -1,11 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, User, Bot, Loader2, Trash2, Maximize2, Minimize2 } from 'lucide-react';
+import { Send, User, Bot, Loader2, Trash2, Maximize2, Minimize2, AlertCircle } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 import Markdown from 'react-markdown';
 
-// Initialize Gemini
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+// Initialize Gemini safely
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+let ai: GoogleGenAI | null = null;
+
+try {
+  if (apiKey && apiKey !== 'undefined') {
+    ai = new GoogleGenAI(apiKey);
+  }
+} catch (e) {
+  console.error("Failed to initialize Gemini AI:", e);
+}
 
 interface Message {
   role: 'user' | 'model';
@@ -29,6 +38,10 @@ export default function Guides() {
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
+    if (!ai) {
+      setMessages(prev => [...prev, { role: 'model', text: "⚠️ **RescueAI is currently offline.** Please ensure a valid VITE_GEMINI_API_KEY is provided in the environment configuration." }]);
+      return;
+    }
 
     const userMessage = input.trim();
     setInput('');
@@ -36,7 +49,6 @@ export default function Guides() {
     setIsLoading(true);
 
     try {
-      // NOTE: Using import.meta.env.VITE_GEMINI_API_KEY for Vite
       const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
       
       const chat = model.startChat({
@@ -69,10 +81,10 @@ export default function Guides() {
   return (
     <div className={
       isFullScreen
-        ? "fixed inset-0 z-[60] bg-[#0f0d0a] flex flex-col p-4 md:p-8"
+        ? "fixed inset-0 z-[60] bg-[#0a0908] flex flex-col p-4 md:p-8"
         : "max-w-6xl mx-auto flex flex-col h-[calc(100vh-160px)]"
     }>
-      {/* Top Header - RescueAI Title and Fullscreen Toggle */}
+      {/* Top Header */}
       <div className="flex items-center justify-between mb-6 shrink-0">
         <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase italic">
           Rescue<span className="text-primary">AI</span>
@@ -95,9 +107,15 @@ export default function Guides() {
         </div>
       </div>
 
-      {/* Main Chat Area - Enlarged */}
+      {!ai && (
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 text-red-500/80 text-sm font-medium">
+          <AlertCircle className="w-5 h-5" />
+          <span>Gemini API Key missing. RescueAI is running in offline mode.</span>
+        </div>
+      )}
+
+      {/* Main Chat Area */}
       <div className="flex-1 flex flex-col glass rounded-[40px] overflow-hidden border border-white/10 shadow-2xl relative min-h-0">
-        {/* Messages List */}
         <div
           ref={scrollRef}
           className="flex-1 overflow-y-auto p-6 md:p-10 space-y-8 scroll-smooth"
@@ -157,12 +175,13 @@ export default function Guides() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Initialize rescue query protocol..."
+              placeholder={ai ? "Initialize rescue query protocol..." : "RescueAI is offline..."}
+              disabled={!ai}
               className="w-full glass-input py-6 px-8 pr-24 rounded-full text-lg font-medium text-white placeholder:text-white/20"
             />
             <button
               onClick={handleSend}
-              disabled={isLoading || !input.trim()}
+              disabled={isLoading || !input.trim() || !ai}
               className="absolute right-3 top-1/2 -translate-y-1/2 w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white hover:scale-105 active:scale-95 transition-all disabled:opacity-30 shadow-[0_0_20px_rgba(217,119,6,0.3)]"
             >
               <Send className="w-6 h-6" />
