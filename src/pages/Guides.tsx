@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, User, Bot, Loader2, Trash2, Expand, Shrink } from 'lucide-react';
+import { Send, User, Bot, Loader2, Trash2, Maximize2, Minimize2 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 import Markdown from 'react-markdown';
 
@@ -90,7 +90,7 @@ export default function Guides() {
             className="p-3 rounded-2xl glass hover:bg-white/10 text-white/50 hover:text-white transition-all"
             title={isFullScreen ? "Exit Fullscreen" : "Enter Fullscreen"}
           >
-            {isFullScreen ? <Shrink className="w-6 h-6" /> : <Expand className="w-6 h-6" />}
+            {isFullScreen ? <Minimize2 className="w-6 h-6" /> : <Maximize2 className="w-6 h-6" />}
           </button>
         </div>
       </div>

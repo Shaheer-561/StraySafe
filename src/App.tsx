@@ -57,7 +57,7 @@ function AppContent() {
   const isLanding = location.pathname === '/';
 
   return (
-    <div className="min-h-screen text-[#f5f2ed] selection:bg-primary/30">
+    <div className="min-h-screen text-[#f5f2ed] bg-[#0a0908]">
       <CustomCursor />
       
       {/* Global Cinematic Texture */}

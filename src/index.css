@@ -14,10 +14,14 @@
 
 @layer base {
   body {
-    @apply bg-[#0a0908] text-[#f5f2ed] antialiased selection:bg-primary/30 selection:text-white overflow-x-hidden;
+    @apply bg-[#0a0908] text-[#f5f2ed] antialiased overflow-x-hidden;
     cursor: none;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
     font-family: 'Outfit', sans-serif;
+  }
+
+  ::selection {
+    @apply bg-primary/30 text-white;
   }
 
   * {
