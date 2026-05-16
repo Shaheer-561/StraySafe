@@ -41,6 +41,7 @@ function PageWrapper({ children }: { children: React.ReactNode }) {
 }
 
 const routeBackgrounds: Record<string, { type: 'video' | 'image'; src: string }> = {
+  '/': { type: 'video', src: '/bg-video-2.mp4' },
   '/dashboard': { type: 'image', src: '/images/hero-image.jpg' },
   '/report/new': { type: 'image', src: '/images/scroll-img-1.jpg' },
   '/reports': { type: 'image', src: '/images/scroll-img-3.jpg' },
@@ -52,9 +53,12 @@ const routeBackgrounds: Record<string, { type: 'video' | 'image'; src: string }>
 
 function AppContent() {
   const location = useLocation();
-  const bgKey = Object.keys(routeBackgrounds).find(key => location.pathname.startsWith(key));
+  
+  // Find background for current route
+  const bgKey = Object.keys(routeBackgrounds).find(key => 
+    key === '/' ? location.pathname === '/' : location.pathname.startsWith(key)
+  );
   const bg = bgKey ? routeBackgrounds[bgKey] : null;
-  const isLanding = location.pathname === '/';
 
   return (
     <div className="min-h-screen text-[#f5f2ed] bg-[#0a0908]">
@@ -64,8 +68,8 @@ function AppContent() {
       <div className="fixed inset-0 pointer-events-none z-[100] opacity-[0.03] mix-blend-overlay" 
            style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }} />
 
-      {/* Dynamic Backgrounds (Conditional) */}
-      {!isLanding && bg && <PageBackground type={bg.type} src={bg.src} />}
+      {/* Unified Dynamic Background System */}
+      {bg && <PageBackground type={bg.type} src={bg.src} />}
 
       <Navbar />
       

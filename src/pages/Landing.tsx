@@ -8,24 +8,7 @@ export default function Landing() {
   const { signIn, user } = useAuth();
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden">
-      {/* Full-screen Background Video */}
-      <div className="fixed inset-0 z-0">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-          poster="/images/hero-image.jpg"
-        >
-          <source src="/bg-video-2.mp4" type="video/mp4" />
-        </video>
-        {/* Cinematic Overlays */}
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0f0d0a] via-transparent to-[#0f0d0a]/60" />
-      </div>
-
+    <div className="min-h-[calc(100vh-120px)] w-full flex items-center justify-center relative">
       {/* Main Content */}
       <div className="relative z-10 text-center px-6 max-w-5xl">
         <motion.div
