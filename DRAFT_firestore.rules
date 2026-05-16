@@ -1,0 +1,108 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Role checks
+    function getUserData(userId) {
+      return get(/databases/$(database)/documents/users/$(userId)).data;
+    }
+
+    function hasRole(role) {
+      return isSignedIn() && getUserData(request.auth.uid).role == role;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        getUserData(request.auth.uid).role == 'admin' || 
+        request.auth.token.email == 'shaheerirfan928@gmail.com'
+      );
+    }
+
+    function isStaff() {
+      return isSignedIn() && getUserData(request.auth.uid).role in ['volunteer', 'vet', 'admin'];
+    }
+
+    // --- Validation Blueprints ---
+
+    function isValidUser(data) {
+      return data.uid == request.auth.uid &&
+             data.displayName is string && data.displayName.size() <= 100 &&
+             data.email is string && data.email.size() <= 100 &&
+             data.role in ['reporter', 'volunteer', 'vet', 'admin'] &&
+             data.gradePoints is number &&
+             data.grade in ['E', 'D', 'C', 'B', 'A', 'S'];
+    }
+
+    function isValidReport(data) {
+      return data.title is string && data.title.size() <= 100 &&
+             data.description is string && data.description.size() <= 2000 &&
+             data.animalType in ['Dog', 'Cat', 'Bird', 'Cow', 'Other'] &&
+             data.priority in ['Low', 'Medium', 'High'] &&
+             data.status in ['Pending', 'In Progress', 'Resolved'] &&
+             data.reporterId is string && data.reporterId == request.auth.uid;
+    }
+
+    // --- Collections ---
+
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(userId) && userId == request.auth.uid && 
+                       isValidUser(incoming()) && 
+                       incoming().gradePoints == 0 && 
+                       incoming().grade == 'E';
+      allow update: if isSignedIn() && userId == request.auth.uid && (
+        // Allow user to update their own display name, block role/points escalation
+        isValidUser(incoming()) && 
+        incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'updatedAt'])
+      ) || isAdmin();
+    }
+
+    match /reports/{reportId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(reportId) && isValidReport(incoming()) && 
+                       incoming().status == 'Pending';
+      allow update: if isSignedIn() && (
+        // Reporter can update title/desc if still pending
+        (existing().reporterId == request.auth.uid && existing().status == 'Pending' && 
+         incoming().diff(existing()).affectedKeys().hasOnly(['title', 'description', 'updatedAt'])) ||
+        // Staff can update status and assigned volunteer
+        (isStaff() && 
+         incoming().diff(existing()).affectedKeys().hasOnly(['status', 'assignedVolunteerId', 'updatedAt']))
+      ) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /activityLogs/{logId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      // Logs are system-written usually, but for this app we might write them during actions
+      // Strictly, we should use a cloud function, but here we'll allow create if it matches the user
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid && 
+                       incoming().timestamp == request.time;
+    }
+  }
+}

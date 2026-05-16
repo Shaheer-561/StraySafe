@@ -1,0 +1,72 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A community member profile",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["reporter", "volunteer", "vet", "admin"] },
+        "gradePoints": { "type": "number" },
+        "grade": { "type": "string", "enum": ["E", "D", "C", "B", "A", "S"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "email", "role", "gradePoints", "grade"]
+    },
+    "Report": {
+      "title": "Animal Report",
+      "description": "A report of a stray or injured animal",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "animalType": { "type": "string", "enum": ["Dog", "Cat", "Bird", "Cow", "Other"] },
+        "priority": { "type": "string", "enum": ["Low", "Medium", "High"] },
+        "isEmergency": { "type": "boolean" },
+        "location": {
+          "type": "object",
+          "properties": {
+            "address": { "type": "string" },
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "status": { "type": "string", "enum": ["Pending", "In Progress", "Resolved"] },
+        "reporterId": { "type": "string" },
+        "assignedVolunteerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "animalType", "priority", "status", "reporterId", "createdAt"]
+    },
+    "ActivityLog": {
+      "title": "Activity Log",
+      "description": "Records points earned by users",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "action": { "type": "string" },
+        "pointsEarned": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/reports/{reportId}": {
+      "schema": "Report",
+      "description": "Animal rescue reports"
+    },
+    "/activityLogs/{logId}": {
+      "schema": "ActivityLog",
+      "description": "Points and activity history"
+    }
+  }
+}

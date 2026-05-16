@@ -1,0 +1,12 @@
+{
+  "name": "StraySafe",
+  "description": "A community-driven platform for reporting, tracking, and rescuing stray and injured animals with gamified rewards and educational resources.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "Firebase",
+    "Real-time Tracking",
+    "Gamification"
+  ]
+}

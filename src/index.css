@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@1,900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-serif: "Playfair Display", serif;
+  
+  --color-primary: #FF5C00;
+  --color-primary-glow: rgba(255, 92, 0, 0.4);
+  --color-surface-dark: #0a0a0a;
+  --color-surface-card: rgba(255, 255, 255, 0.03);
+}
+
+@layer base {
+  body {
+    @apply bg-[#050505] text-white antialiased selection:bg-primary/30 selection:text-white overflow-x-hidden;
+    cursor: none; /* We'll use a custom cursor */
+  }
+}
+
+/* ============ GLASS EFFECTS ============ */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 30px rgba(255, 92, 0, 0.1);
+  outline: none;
+}
+
+/* ============ PARALLAX BACKGROUNDS ============ */
+.parallax-container {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.parallax-layer {
+  position: absolute;
+  inset: -20%;
+  will-change: transform;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  mix-blend-mode: screen;
+}
+
+/* ============ TEXT STYLES ============ */
+.text-glow {
+  text-shadow: 0 0 40px rgba(255, 92, 0, 0.35), 0 0 80px rgba(255, 92, 0, 0.15);
+}
+
+.heading-huge {
+  @apply text-5xl md:text-8xl font-black tracking-tighter leading-none;
+}
+
+/* ============ CUSTOM CURSOR ============ */
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #FF5C00;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  transition: transform 0.1s ease;
+}
+
+.cursor-outline {
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255, 92, 0, 0.5);
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  border-radius: 50%;
+  transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease;
+}
+
+/* ============ HOVER EFFECTS ============ */
+.hover-glow {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hover-glow:hover {
+  box-shadow: 0 0 50px rgba(255, 92, 0, 0.2), 0 0 100px rgba(255, 92, 0, 0.1);
+  border-color: rgba(255, 92, 0, 0.4);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.magnetic-area {
+  @apply relative inline-block;
+}
+
+/* ============ ANIMATIONS ============ */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-20px) rotate(2deg); }
+  66% { transform: translateY(10px) rotate(-1deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.25; transform: scale(1.1); }
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 10s ease-in-out infinite;
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, #fff 0%, #FF5C00 50%, #fff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 5s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ============ SCROLLBAR ============ */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 92, 0, 0.3);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FF5C00;
+}
