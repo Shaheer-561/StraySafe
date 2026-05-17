@@ -104,12 +104,20 @@ export default function ReportList() {
                   <div className="flex-1 space-y-3 min-w-0">
                     <div className="flex items-center gap-4 flex-wrap">
                       <h3 className="text-3xl font-black tracking-tighter uppercase group-hover:text-primary transition-colors font-serif italic text-white">{report.title}</h3>
-                      {report.isEmergency && (
+                      {report.isEmergency ? (
                         <div className="flex items-center gap-2 bg-red-500/10 text-red-500 border border-red-500/20 px-3 py-1 rounded-full animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.2)]">
                           <AlertTriangle className="w-3 h-3" />
-                          <span className="text-[10px] font-black uppercase tracking-widest">Priority Alert</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest">Emergency Alert</span>
                         </div>
-                      )}
+                      ) : report.priority ? (
+                        <div className={`flex items-center gap-2 border px-3 py-1 rounded-full ${
+                          report.priority === 'High' ? 'bg-orange-500/10 text-orange-500 border-orange-500/20 shadow-[0_0_15px_rgba(249,115,22,0.1)]' :
+                          report.priority === 'Medium' ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20 shadow-[0_0_15px_rgba(234,179,8,0.1)]' :
+                          'bg-blue-500/10 text-blue-500 border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.1)]'
+                        }`}>
+                          <span className="text-[10px] font-black uppercase tracking-widest">Priority: {report.priority}</span>
+                        </div>
+                      ) : null}
                     </div>
                     <div className="flex flex-wrap items-center gap-6 text-[10px] text-white/30 font-black uppercase tracking-[0.2em]">
                       <div className="flex items-center gap-2">

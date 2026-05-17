@@ -159,11 +159,19 @@ export default function ReportDetail() {
               <div className="glass-strong text-white/40 text-[10px] font-black px-5 py-2 rounded-full uppercase tracking-[0.3em] border border-white/10">
                 {report.animalType}
               </div>
-              {report.isEmergency && (
+              {report.isEmergency ? (
                 <div className="bg-red-500/10 text-red-500 text-[10px] font-black px-5 py-2 rounded-full uppercase tracking-[0.3em] border border-red-500/30 animate-pulse shadow-[0_0_20px_rgba(239,68,68,0.2)]">
-                  Priority Directive
+                  Emergency Directive
                 </div>
-              )}
+              ) : report.priority ? (
+                <div className={`text-[10px] font-black px-5 py-2 rounded-full uppercase tracking-[0.3em] border ${
+                  report.priority === 'High' ? 'bg-orange-500/10 text-orange-500 border-orange-500/20 shadow-[0_0_20px_rgba(249,115,22,0.2)]' :
+                  report.priority === 'Medium' ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20 shadow-[0_0_20px_rgba(234,179,8,0.2)]' :
+                  'bg-blue-500/10 text-blue-500 border-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.2)]'
+                }`}>
+                  Priority: {report.priority}
+                </div>
+              ) : null}
             </div>
             <h1 className="text-7xl md:text-8xl font-black tracking-tighter text-glow text-white uppercase italic leading-none">{report.title}</h1>
             <div className="flex flex-wrap items-center gap-8 text-white/30 font-black uppercase tracking-[0.3em] text-[10px]">
