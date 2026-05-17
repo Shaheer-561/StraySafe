@@ -21,11 +21,11 @@ export default function Landing() {
             Animal Rescue Network
           </p>
 
-          <h1 className="text-7xl md:text-9xl font-black tracking-[calc(-0.06em)] leading-[0.8] text-white uppercase text-glow">
+          <h1 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-[calc(-0.06em)] leading-[0.85] text-white uppercase text-glow">
             STRAY<span className="text-primary italic font-serif">SAFE</span>
           </h1>
 
-          <p className="max-w-xl mx-auto text-xl md:text-2xl font-medium text-white/60 leading-relaxed mb-12">
+          <p className="max-w-xl mx-auto text-base sm:text-xl md:text-2xl font-medium text-white/60 leading-relaxed mb-8 md:mb-12">
             The world's first decentralized neural network for stray animal protection and rapid rescue response.
           </p>
 
@@ -37,18 +37,18 @@ export default function Landing() {
             {user ? (
               <Link
                 to="/dashboard"
-                className="inline-flex items-center gap-4 px-16 py-7 bg-white text-black rounded-full font-black text-xl hover:bg-primary hover:text-white transition-all duration-500 hover:shadow-[0_0_80px_rgba(217,119,6,0.6)] group"
+                className="inline-flex items-center justify-center gap-4 w-full sm:w-auto px-10 sm:px-16 py-5 sm:py-7 bg-white text-black rounded-full font-black text-lg sm:text-xl hover:bg-primary hover:text-white transition-all duration-500 hover:shadow-[0_0_80px_rgba(217,119,6,0.6)] group"
               >
                 ACCESS CONSOLE
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" />
               </Link>
             ) : (
               <button
                 onClick={signIn}
-                className="inline-flex items-center gap-4 px-16 py-7 bg-primary text-white rounded-full font-black text-xl hover:scale-105 transition-all duration-500 hover:shadow-[0_0_80px_rgba(217,119,6,0.6)] group"
+                className="inline-flex items-center justify-center gap-4 w-full sm:w-auto px-10 sm:px-16 py-5 sm:py-7 bg-primary text-white rounded-full font-black text-lg sm:text-xl hover:scale-105 transition-all duration-500 hover:shadow-[0_0_80px_rgba(217,119,6,0.6)] group"
               >
                 INITIALIZE LINK
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" />
               </button>
             )}
           </motion.div>

@@ -75,14 +75,14 @@ function AppContent() {
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<PageWrapper><Landing /></PageWrapper>} />
-            <Route path="/dashboard" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><Dashboard /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/report/new" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><ReportForm /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/reports" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><ReportList /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/reports/:id" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><ReportDetail /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/guides" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><Guides /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/leaderboard" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><Leaderboard /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><Profile /></div></PageWrapper></ProtectedRoute>} />
-            <Route path="/admin" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-6 pb-32"><Admin /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-3 sm:px-6 pb-28 sm:pb-32"><Dashboard /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/report/new" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-3 sm:px-6 pb-28 sm:pb-32"><ReportForm /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/reports" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-3 sm:px-6 pb-28 sm:pb-32"><ReportList /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/reports/:id" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-3 sm:px-6 pb-28 sm:pb-32"><ReportDetail /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/guides" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-3 sm:px-6 pb-28 sm:pb-32"><Guides /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/leaderboard" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-3 sm:px-6 pb-28 sm:pb-32"><Leaderboard /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-3 sm:px-6 pb-28 sm:pb-32"><Profile /></div></PageWrapper></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><PageWrapper><div className="container mx-auto px-3 sm:px-6 pb-28 sm:pb-32"><Admin /></div></PageWrapper></ProtectedRoute>} />
           </Routes>
         </AnimatePresence>
       </main>

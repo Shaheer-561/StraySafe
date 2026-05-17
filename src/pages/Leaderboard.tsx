@@ -73,7 +73,7 @@ export default function Leaderboard() {
         >
           <Trophy className="w-5 h-5" /> HALL OF VALOR
         </motion.div>
-        <h1 className="text-8xl font-black tracking-tighter text-glow text-white uppercase italic leading-none">ELITE NODES</h1>
+        <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-glow text-white uppercase italic leading-none">ELITE NODES</h1>
         <p className="text-white/30 font-black max-w-xl mx-auto uppercase tracking-[0.3em] text-[10px] leading-relaxed">
           Commemorating high-clearance responders maintaining the planetary rescue grid through dedicated frontline service.
         </p>
