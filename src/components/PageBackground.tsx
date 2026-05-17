@@ -9,9 +9,9 @@ interface PageBackgroundProps {
 
 export default function PageBackground({ type, src, overlay = 'dark' }: PageBackgroundProps) {
   const overlayClass = 
-    overlay === 'light' ? 'bg-black/30' :
-    overlay === 'warm'  ? 'bg-[#1a1510]/70' :
-                          'bg-black/50';
+    overlay === 'light' ? 'bg-black/10' :
+    overlay === 'warm'  ? 'bg-[#1a1510]/40' :
+                          'bg-black/30';
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -38,8 +38,8 @@ export default function PageBackground({ type, src, overlay = 'dark' }: PageBack
       
       {/* Dynamic Cinematic Gradient Overlays */}
       <div className={`absolute inset-0 ${overlayClass} backdrop-blur-[1px]`} />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0908] via-transparent to-[#0a0908]/40" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0a0908]/20 via-transparent to-[#0a0908]/20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0908]/80 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0a0908]/10 via-transparent to-[#0a0908]/10" />
     </div>
   );
 }
