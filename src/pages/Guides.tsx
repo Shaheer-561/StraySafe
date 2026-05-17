@@ -23,7 +23,7 @@ interface Message {
 
 export default function Guides() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'model', text: "Hello! I'm **StraySafe AI**. Describe the situation and I'll guide you through the safest steps to help a stray animal." }
+    { role: 'model', text: "Hello! I'm **RescueAI**. Describe the situation and I'll guide you through the safest steps to help a stray animal." }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +60,7 @@ export default function Guides() {
 
     try {
       const chat = ai.chats.create({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-2.5-flash',
         history: messages.map(m => ({
           role: m.role === 'model' ? 'model' : 'user',
           parts: [{ text: m.text }],

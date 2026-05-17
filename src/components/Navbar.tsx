@@ -23,7 +23,7 @@ export default function Navbar() {
   const navItems = [
     { name: 'Home', path: '/', icon: PawPrint },
     { name: 'Reports', path: '/reports', icon: Flag },
-    { name: 'AI Guide', path: '/guides', icon: BookOpen },
+    { name: 'RescueAI', path: '/guides', icon: BookOpen },
     { name: 'Heroes', path: '/leaderboard', icon: Trophy },
   ];
 
